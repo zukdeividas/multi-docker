@@ -1,0 +1,21 @@
+sudo: required
+services: 
+    -docker
+
+before-install:
+    - docker build -t zukdeividas/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true zukdeividas/react-test npm test
+
+after_success:
+    - docker build -t zukdeividas/multi-client ./client
+    - docker build -t zukdeividas/multi-nginx ./nginx
+    - docker build -t zukdeividas/multi-server ./server
+    - docker build -t zukdeividas/multi-worker ./worker
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push zukdeividas/multi-client
+    - docker push zukdeividas/multi-nginx
+    - docker push zukdeividas/multi-server
+    - docker push zukdeividas/multi-worker
