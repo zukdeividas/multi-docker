@@ -26,7 +26,7 @@ deploy:
     app: multi-docker
     env: MultiDocker-env
     bucket_name: elasticbeanstalk-us-east-2-797373521527
-    bucket_path: docker-multi
+    bucket_path: multi-docker
     
     on:
         branch: master
